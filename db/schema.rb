@@ -11,24 +11,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151024211208) do
+ActiveRecord::Schema.define(version: 20151026223647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "blueprints", force: :cascade do |t|
-    t.integer  "item_id"
-    t.integer  "component_id"
+  create_table "blueprint_items", force: :cascade do |t|
+    t.integer  "quantity"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "blueprint_id"
+    t.integer  "item_id"
+  end
+
+  add_index "blueprint_items", ["blueprint_id"], name: "index_blueprint_items_on_blueprint_id", using: :btree
+  add_index "blueprint_items", ["item_id"], name: "index_blueprint_items_on_item_id", using: :btree
+
+  create_table "blueprints", force: :cascade do |t|
+    t.integer  "type_id"
+    t.integer  "product_id"
+    t.string   "name"
+    t.integer  "production_time"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "items", force: :cascade do |t|
+    t.integer  "type_id"
     t.string   "name"
-    t.integer  "typeid"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "blueprintid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "blueprint_items", "blueprints"
+  add_foreign_key "blueprint_items", "items"
 end

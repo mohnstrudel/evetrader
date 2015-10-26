@@ -1,7 +1,3 @@
 class Item < ActiveRecord::Base
-
-	validates :name, :typeid, presence: true
-
-	has_many :blueprints
-	has_many :components, through: :items
+	has_many :blueprints, through: :blueprint_items
 end
