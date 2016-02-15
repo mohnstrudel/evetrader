@@ -1,0 +1,58 @@
+{
+  "solarSystems": {
+    "30000002": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Lashesih",
+      "securityValue": "0.751689"
+    },
+    "30000142": {
+      "regionID": "10000001",
+      "regionName": "Forge",
+      "solarSystemName": "Jita",
+      "securityValue": "0.751689"
+    },
+    "30000003": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Akpivem",
+      "securityValue": "0.846292"
+    },
+    "30000004": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Jark",
+      "securityValue": "0.817001"
+    },
+    "30000005": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Sasta",
+      "securityValue": "0.814337"
+    },
+    "30000006": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Zaid",
+      "securityValue": "0.864229"
+    },
+    "30000007": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Yuzier",
+      "securityValue": "0.906556"
+    },
+    "30000008": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Nirbhi",
+      "securityValue": "0.882116"
+    },
+    "30000023": {
+      "regionID": "10000001",
+      "regionName": "Derelik",
+      "solarSystemName": "Fovihi",
+      "securityValue": "0.869394"
+    }
+  }
+}

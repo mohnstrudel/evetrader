@@ -1,0 +1,21 @@
+%h2=@blueprint.name
+%p
+	Blueprint Type ID
+	=@blueprint.type_id
+	%br
+	Product Type ID
+	=@blueprint.product_type_id
+%p
+	%h3 Components
+
+	-@blueprint.blueprint_items.each do |bp_item|
+		%br
+		Component Type ID
+		=bp_item.product_type_id
+		, Quantity
+		=bp_item.quantity
+
+%p
+	=@myComponents
+%p
+	=@myProduct

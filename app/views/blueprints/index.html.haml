@@ -1,0 +1,7 @@
+%h1 All Blueprints
+
+%p
+	-@blueprints.each do |blueprint|
+		%p
+			=link_to blueprint.name, blueprint_path(blueprint)
+			
