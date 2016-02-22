@@ -24,6 +24,18 @@ class BlueprintsController < ApplicationController
 		@sellRecommendations = myProduct[1]
 
 		@profit = @sellPrice[0] - @productionPrice.sum
+
+
+
+		if @profit > 0
+			@profit_class = "text-success"
+			@word_result = "PROFIT"
+			@arrow_class = "fa-arrow-up"
+		else
+			@word_result = "LOSS"
+			@profit_class = "text-danger"
+			@arrow_class = "fa-arrow-down"
+		end
 	end
 
 	private

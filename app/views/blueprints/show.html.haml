@@ -1,97 +1,175 @@
-%h2=@blueprint.name
-%p
-	Blueprint Type ID
-	=@blueprint.type_id
-	%br
-	Product Type ID
-	=@blueprint.product_type_id
-%p
-	%h3 Components
+%section#eve_wrapper
+  %section#content.table-layout.animated.fadeIn
+    / begin: .tray-center
+    .tray.tray-center
+      / dashboard tiles
+      .row
+        .col-sm-12.col-xl-12
+          .panel.panel-primary.panel-border.top
+            .panel-heading
+              %span.panel-title 
+                =@blueprint.name
+              .widget-menu.pull-right
+                %code.mr10.p3.ph5 
+                  TypeID:
+                  =@blueprint.type_id
+            .panel-body
+              %p.p2
+                Components:
+                %ul
+                  -@blueprint.blueprint_items.each do |bp_item|
+                    %li
+                      Component Type ID
+                      =bp_item.product_type_id
+                      , Quantity
+                      =bp_item.quantity
 
-	-@blueprint.blueprint_items.each do |bp_item|
-		%br
-		Component Type ID
-		=bp_item.product_type_id
-		, Quantity
-		=bp_item.quantity
-
-%p 
-	Your production costs will be at best:
-	=@productionPrice.sum 
-	ISK
-
-%p
-	Your best sell price for end product at best:
-	=@sellPrice[0]
-	ISK
-
-%p 
-	Your profit per 1 unit of end product:
-	=@profit
-	ISK
-
-%p
-	We recommend buying components there:
-	%br
-	-@buyRecommendations.each do |typeid|
-		-if typeid.length == 2 && typeid[1].class == Fixnum
-			=typeid[1]
-			pieces at
-			=typeid[0][0][:stationName]
-			for 
-			=typeid[0][0][:price]
-			%br
-		-else
-			-typeid.each do |order|
-
-				-if order.length == 1
-					=order[0][:volRemain]
-					at station: 
-					=order[0][:stationName]
-					for
-					=order[0][:price]
-					%br
-				-else
-					=order[:volRemain]
-					at station: 
-					=order[:stationName]
-					for
-					=order[:price]
-					%br
-%p
-	We recommend selling end product there:
-	%br
-	-@sellRecommendations.each do |typeid|
-		-if typeid.length == 2 && typeid[1].class == Fixnum
-			=typeid[1]
-			pieces at
-			=typeid[0][0][:stationName]
-			for 
-			=typeid[0][0][:price]
-			%br
-		-else
-			-typeid.each do |order|
-				=order[:volRemain]
-				pieces at
-				=order[:stationName]
-				for 
-				=order[:price]
-				%br
-
-
-/ 	%p
-/ 	Price for creating one good:
-/ 	=@productionPrice
-/ %p
-/ 	We recommend buying components there:
-/ 	-@buyRecommendations.each do |recommendation|
-/ 		=recommendation[0][:stationName]
-/ 		%br
-/ %p
-/ 	The best price for end product is:
-/ 	=@sellPrice
-/ %p
-/ 	We recommend selling end product there:
-/ 	-@sellRecommendations.each do |sell|
-/ 		=sell[0][:stationName]
-/ 		%br
+      .row
+        .col-sm-4.col-xl-3
+          .panel.panel-tile.text-center.br-a.br-grey
+            .panel-body
+              %h1.fs30.mt5.mbn
+                =formatBigNumber(@productionPrice.sum)
+                ISK
+              %h6.text-system PRODUCTION COST
+            .panel-footer.br-t.p12
+              %span.fs11
+                / %i.fa.fa-arrow-up.pr5
+                per 
+                %b ONE
+                end production Item
+        .col-sm-4.col-xl-3
+          .panel.panel-tile.text-center.br-a.br-grey
+            .panel-body
+              %h1.fs30.mt5.mbn
+                =formatBigNumber(@sellPrice[0])
+                ISK
+              %h6.text-system BEST SELL PRICE
+            .panel-footer.br-t.p12
+              %span.fs11
+                / %i.fa.fa-arrow-up.pr5
+                per 
+                %b ONE
+                end production Item
+        .col-sm-4.col-xl-3
+          .panel.panel-tile.text-center.br-a.br-grey
+            .panel-body
+              %h1.fs30.mt5.mbn
+                =formatBigNumber(@profit)
+                ISK
+              %h6{:class => "#{@profit_class}"}
+                =@word_result
+            .panel-footer.br-t.p12
+              %span.fs11
+                %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
+                per
+                %b ONE
+                end production Item
+        .col-sm-3.col-xl-3.visible-xl
+          .panel.panel-tile.text-center.br-a.br-grey
+            .panel-body
+              %h1.fs30.mt5.mbn
+                =formatBigNumber(@profit * 100)
+                ISK
+              %h6{:class => "#{@profit_class}"}
+                =@word_result
+            .panel-footer.br-t.p12
+              %span.fs11
+                %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
+                per
+                %b BUNCH
+      / Materials suggestion table
+      .panel
+        .panel-heading
+          %span.panel-title.hidden-xs Where to buy materials
+        .panel-body.pn
+          .table-responsive
+            %table.table.admin-form.theme-warning.tc-checkbox-1.fs13
+              %thead
+                %tr.bg-light
+                  %th Image
+                  %th Material
+                  %th Station Name
+                  %th Quantity
+                  %th Price
+              %tbody
+                -@buyRecommendations.each do |typeid|
+                  -if typeid.length == 2 && typeid[1].class == Fixnum
+                    %tr
+                      %td
+                        =image_tag findPicture(typeid[0][0][:typeid])
+                      %td
+                        =Item.find(typeid[0][0][:typeid]).name
+                      %td
+                        =typeid[0][0][:stationName]
+                      %td
+                        =typeid[1]
+                      %td
+                        =typeid[0][0][:price]
+                  -else
+                    -typeid.each do |order|
+                      -if order.length == 1
+                        %tr
+                          %td
+                            =image_tag findPicture(order[0][:typeid])
+                          %td
+                            =Item.find(order[0][:typeid]).name
+                          %td
+                            =order[0][:stationName]
+                          %td
+                            =order[0][:volRemain]
+                          %td
+                            =order[0][:price]   
+                      -else
+                        %tr
+                          %td
+                            =image_tag findPicture(order[:typeid])
+                          %td
+                            =Item.find(order[:typeid]).name
+                          %td
+                            =order[:stationName]
+                          %td
+                            =order[:volRemain]
+                          %td
+                            =order[:price] 
+      / End product suggestion table
+      .panel
+        .panel-heading
+          %span.panel-title.hidden-xs Where to sell end product
+        .panel-body.pn
+          .table-responsive
+            %table.table.admin-form.theme-warning.tc-checkbox-1.fs13
+              %thead
+                %tr.bg-light
+                  %th Image
+                  %th Material
+                  %th Station Name
+                  %th Quantity
+                  %th Price
+              %tbody
+                -@sellRecommendations.each do |typeid|
+                  -if typeid.length == 2 && typeid[1].class == Fixnum
+                    %tr
+                      %td
+                        =image_tag findPicture(typeid[0][0][:typeid])
+                      %td
+                        =Item.find(typeid[0][0][:typeid]).name
+                      %td
+                        =typeid[0][0][:stationName]
+                      %td
+                        =typeid[1]
+                      %td
+                        =typeid[0][0][:price]
+                  -else
+                    -typeid.each do |order|
+                      %tr
+                        %td
+                          =image_tag findPicture(order[:typeid])
+                        %td
+                          =Item.find(order[:typeid]).name
+                        %td
+                          =order[:stationName]
+                        %td
+                          =order[:volRemain]
+                        %td
+                          =order[:price]    

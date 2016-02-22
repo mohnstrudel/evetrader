@@ -1,0 +1,97 @@
+%h2=@blueprint.name
+%p
+	Blueprint Type ID
+	=@blueprint.type_id
+	%br
+	Product Type ID
+	=@blueprint.product_type_id
+%p
+	%h3 Components
+
+	-@blueprint.blueprint_items.each do |bp_item|
+		%br
+		Component Type ID
+		=bp_item.product_type_id
+		, Quantity
+		=bp_item.quantity
+
+%p 
+	Your production costs will be at best:
+	=@productionPrice.sum 
+	ISK
+
+%p
+	Your best sell price for end product at best:
+	=@sellPrice[0]
+	ISK
+
+%p 
+	Your profit per 1 unit of end product:
+	=@profit
+	ISK
+
+%p
+	We recommend buying components there:
+	%br
+	-@buyRecommendations.each do |typeid|
+		-if typeid.length == 2 && typeid[1].class == Fixnum
+			=typeid[1]
+			pieces at
+			=typeid[0][0][:stationName]
+			for 
+			=typeid[0][0][:price]
+			%br
+		-else
+			-typeid.each do |order|
+
+				-if order.length == 1
+					=order[0][:volRemain]
+					at station: 
+					=order[0][:stationName]
+					for
+					=order[0][:price]
+					%br
+				-else
+					=order[:volRemain]
+					at station: 
+					=order[:stationName]
+					for
+					=order[:price]
+					%br
+%p
+	We recommend selling end product there:
+	%br
+	-@sellRecommendations.each do |typeid|
+		-if typeid.length == 2 && typeid[1].class == Fixnum
+			=typeid[1]
+			pieces at
+			=typeid[0][0][:stationName]
+			for 
+			=typeid[0][0][:price]
+			%br
+		-else
+			-typeid.each do |order|
+				=order[:volRemain]
+				pieces at
+				=order[:stationName]
+				for 
+				=order[:price]
+				%br
+
+
+/ 	%p
+/ 	Price for creating one good:
+/ 	=@productionPrice
+/ %p
+/ 	We recommend buying components there:
+/ 	-@buyRecommendations.each do |recommendation|
+/ 		=recommendation[0][:stationName]
+/ 		%br
+/ %p
+/ 	The best price for end product is:
+/ 	=@sellPrice
+/ %p
+/ 	We recommend selling end product there:
+/ 	-@sellRecommendations.each do |sell|
+/ 		=sell[0][:stationName]
+/ 		%br
