@@ -4,7 +4,9 @@ class BlueprintsController < ApplicationController
 	include Getdata
 
 	def index
-		@blueprints = Blueprint.all
+		@total_amount = Blueprint.all.count
+		@blueprints = Blueprint.search(params[:search])
+		@amount = @blueprints.count
 	end
 
 	def show

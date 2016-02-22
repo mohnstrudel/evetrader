@@ -1,7 +1,88 @@
-%h1 All Blueprints
+.main
+	.header.navbar.navbar-fixed-top
+		.navbar-branding
+			%a.navbar-brand{ :href => "dashboard.html"}
+				%b EVE
+				Trader
+		%ul.nav.navbar-nav.navbar-left
+			%li
+				%a{:href => "#", :role => "button"}
+					Home
+			%li
+				%a{:href => "#", :role => "button"}
+					About
 
-%p
-	-@blueprints.each do |blueprint|
-		%p
-			=link_to blueprint.name, blueprint_path(blueprint)
-			
+	%section#eve_wrapper
+		%section#content.animated.fadeIn
+			/ Demo Text Content
+			.pl15.pr50
+				%h4 Welcome to EVE Trader
+				%hr.alt.short
+					%p.text-muted This resource allows productioneers to calculate most profitable blueprints. You just need to check for a specific blueprint and we will give you suggestions where to buy components (cheapest) and where to sell end products (most expensive). Please keep in mind, that as of now we are only covering solar systems which are a) safe and b) within an area of 5 jumps around the 5 main trade hubs (Jita, Amarr, Dodixie, Rens, Hek).
+
+			/ begin: .tray-center
+			.tray.tray-center
+				/ Search Results Panel
+				.panel
+					.panel-heading
+						%span.panel-title.text-muted.hidden-xs 
+							=@total_amount
+							blueprint results currently stored.
+					.panel-menu
+						%form
+							.input-group.input-hero.input-hero-sm
+								%span.input-group-addon
+									%i.fa.fa-search
+								%input#icon-filter.form-control{:placeholder => "Enter search terms..", :type => "text", :name => "search", :value => params[:search]}
+					.panel-body.ph20
+						.tab-content
+							/ Classic Search Pane
+							#search.tab-pane.active
+								/ Search Pane Title
+								%h3
+									Displaying
+									%b.text-primary 
+										=@amount
+									results
+								%hr.alt
+									/ Begin Search Result Entries
+									-@blueprints.each do |blueprint|
+										.search-result
+											%h3
+												=link_to blueprint.name, blueprint_path(blueprint)
+											%ul.result-meta
+												%li
+													TypeID:
+													=blueprint.id
+												%li
+													Placeholder
+											%p Materials per one piece of end product:
+											%ul.result-meta
+												-blueprint.blueprint_items.each do |bpi|
+													%li
+														=bpi.quantity
+														pieces of
+														/ ="#{Item.find(bpi.product_type_id).name} (typeid: #{bpi.product_type_id})"
+
+					.panel-footer.clearfix
+						%nav
+							%ul.pagination.pull-right
+								%li.prev.disabled
+									%a{:href => "#"}
+										%i.fa.fa-angle-left
+										Previous
+								%li.active
+									%a{:href => "#"} 1
+								%li
+									%a{:href => "#"} 2
+								%li
+									%a{:href => "#"} 3
+								%li
+									%a{:href => "#"} 4
+								%li
+									%a{:href => "#"} 5
+								%li.next
+									%a{:href => "#"}
+										Next
+										%i.fa.fa-angle-right
+/ end: .tray-center

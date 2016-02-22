@@ -1,0 +1,36 @@
+.main
+	.header.navbar.navbar-fixed-top
+		.navbar-branding
+			%a.navbar-brand{ :href => "dashboard.html"}
+				%b EVE
+				Trader
+		%ul.nav.navbar-nav.navbar-left
+			%li
+				%a{:href => "#", :role => "button"}
+					Home
+			%li
+				%a{:href => "#", :role => "button"}
+					About
+
+	%section#eve_wrapper
+		%section#content.animated.fadeIn
+			/ Demo Text Content
+			.pl15.pr50
+				%h4 Welcome to EVE Trader
+				%hr.alt.short
+					%p.text-muted This resource allows productioneers to calculate most profitable blueprints. You just need to check for a specific blueprint and we will give you suggestions where to buy components (cheapest) and where to sell end products (most expensive). Please keep in mind, that as of now we are only covering solar systems which are a) safe and b) within an area of 5 jumps around the 5 main trade hubs (Jita, Amarr, Dodixie, Rens, Hek).
+
+			/ begin: .tray-center
+			.tray.tray-center
+				/ Search Results Panel
+				.panel
+					.panel-heading
+						%span.panel-title.text-muted.hidden-xs 
+							=@blueprint_amount
+							blueprint results currently stored.
+					.panel-menu
+						%form
+							.input-group.input-hero.input-hero-sm
+								%span.input-group-addon
+									%i.fa.fa-search
+								%input#icon-filter.form-control{:placeholder => "Enter search terms..", :type => "text", :name => "search", :value => params[:search]}

@@ -26,6 +26,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # HAML markup
 gem "haml-rails"
 
+# Lets install some native icon support
+gem "font-awesome-rails"
+gem 'bootstrap-glyphicons'
+
 # Using nokogiri for parsing XML data from the interwebz
 gem 'nokogiri'
 
