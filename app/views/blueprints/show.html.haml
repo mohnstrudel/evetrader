@@ -62,7 +62,7 @@
 	We recommend selling end product there:
 	%br
 	-@sellRecommendations.each do |typeid|
-		-if typeid.length == 2
+		-if typeid.length == 2 && typeid[1].class == Fixnum
 			=typeid[1]
 			pieces at
 			=typeid[0][0][:stationName]
@@ -70,12 +70,13 @@
 			=typeid[0][0][:price]
 			%br
 		-else
-			=typeid[0][:volRemain]
-			pieces at
-			=typeid[0][:stationName]
-			for 
-			=typeid[0][:price]
-			%br
+			-typeid.each do |order|
+				=order[:volRemain]
+				pieces at
+				=order[:stationName]
+				for 
+				=order[:price]
+				%br
 
 
 / 	%p
