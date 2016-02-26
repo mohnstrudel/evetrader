@@ -225,6 +225,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri
   pg
+  puma
   rails (= 4.2.4)
   rspec-rails
   sass-rails (~> 5.0)
