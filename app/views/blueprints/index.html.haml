@@ -19,7 +19,7 @@
 						.input-group.input-hero.input-hero-sm
 							%span.input-group-addon
 								%i.fa.fa-search
-							%input#icon-filter.form-control{:placeholder => "Enter search terms..", :type => "text", :name => "search", :value => params[:search]}
+							%input#icon-filter.form-control{:placeholder => "Enter blueprint ID or name...", :type => "text", :name => "search", :value => params[:search]}
 				.panel-body.ph20
 					.tab-content
 						/ Classic Search Pane
@@ -29,6 +29,8 @@
 								Displaying
 								%b.text-primary 
 									=@amount
+								-unless params[:search]
+									="random"
 								results
 							%hr.alt
 								/ Begin Search Result Entries
@@ -48,7 +50,8 @@
 												%li
 													=bpi.quantity
 													pieces of
-													/ ="#{Item.find(bpi.product_type_id).name} (typeid: #{bpi.product_type_id})"
+													=findItemName(bpi.product_type_id)
+													="(typeid: #{bpi.product_type_id})"
 
 				.panel-footer.clearfix
 					%nav

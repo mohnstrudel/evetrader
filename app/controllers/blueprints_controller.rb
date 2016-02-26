@@ -14,27 +14,27 @@ class BlueprintsController < ApplicationController
 		product = [@blueprint]
 		
 		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: 100, mode: :sell})
-
-		@productionPrice = myComponents[0]
-		@buyRecommendations = myComponents[1]
-
 		myProduct = Calculation.findBestPrice({components: product, minAmount: 100, mode: :buy})
+		unless myComponents.class == String or myProduct.class == String
+			@productionPrice = myComponents[0]
+			@buyRecommendations = myComponents[1]
 
-		@sellPrice = myProduct[0]
-		@sellRecommendations = myProduct[1]
+			@sellPrice = myProduct[0][0]
+			@sellRecommendations = myProduct[1]
 
-		@profit = @sellPrice[0] - @productionPrice.sum
+			@profit = @sellPrice - @productionPrice.sum
 
-
-
-		if @profit > 0
-			@profit_class = "text-success"
-			@word_result = "PROFIT"
-			@arrow_class = "fa-arrow-up"
+			if @profit > 0
+				@profit_class = "text-success"
+				@word_result = "PROFIT"
+				@arrow_class = "fa-arrow-up"
+			else
+				@word_result = "LOSS"
+				@profit_class = "text-danger"
+				@arrow_class = "fa-arrow-down"
+			end
 		else
-			@word_result = "LOSS"
-			@profit_class = "text-danger"
-			@arrow_class = "fa-arrow-down"
+			@error = myComponents
 		end
 	end
 

@@ -34,20 +34,23 @@ module Getdata
 		# url = "http://api.eve-central.com/api/marketstat?typeid=25601&typeid=35&regionlimit=10000002"
 		# url = "http://api.eve-central.com/api/quicklook?typeid=25601"
 		doc = Nokogiri::HTML(open(url))
-		
-		doc.xpath("//#{order_verb}//order").each_with_index do |order, index|
-			# puts order.at_xpath('station').inner_text
-			if @stations.include?(order.at_xpath('station').inner_text.to_i)
-				# We now store the desired orders (which are at the desired stations, which we
-				# already calculated) in an array. I considered building a new XML document with only
-				# orders, which are desired, however saving in an array seems to be sufficient as well
-				@result << order
+		Benchmark.bm do |x|
+			x.report("Storing: ") do
+				doc.xpath("//#{order_verb}//order").each_with_index do |order, index|
+				# puts order.at_xpath('station').inner_text
+					if @stations.include?(order.at_xpath('station').inner_text.to_i)
+					# We now store the desired orders (which are at the desired stations, which we
+					# already calculated) in an array. I considered building a new XML document with only
+					# orders, which are desired, however saving in an array seems to be sufficient as well
+						@result << order
+					end
+				end
 			end
 		end
 
-		puts "Printing result from EVE-central parsing for typeid: #{typeid}"
+		# puts "Printing result from EVE-central parsing for typeid: #{typeid}"
 		
-		puts @result
+		# puts @result
 
 		return @result
 	end

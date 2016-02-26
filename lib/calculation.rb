@@ -24,13 +24,17 @@ module Calculation
 				componentQuantity = 1
 			end
 			
-			componentTypeID =   component['product_type_id']
+			@componentTypeID =   component['product_type_id']
 	
-			@order_array = Getdata.parseEveCentral(componentTypeID, options[:mode])
+			begin
+				@order_array = Getdata.parseEveCentral(@componentTypeID, options[:mode])
+			rescue Exception => e
+				puts e.message
+			end
 
-			puts "Printing writeRecommentations"
-			puts @orderArray
-			puts componentTypeID
+			# puts "Printing writeRecommentations"
+			# puts @orderArray
+			# puts componentTypeID
 
 			@order_array.each_with_index do |order, index|
 				#within returned sell orders we now search for station name, price and volume remained
@@ -44,23 +48,30 @@ module Calculation
 
 				# ... save the prices into the array
 				
-				@orderArray << {typeid: componentTypeID, stationName: stationName, price: price, volRemain: volRemain}
+				@orderArray << {typeid: @componentTypeID, stationName: stationName, price: price, volRemain: volRemain}
 			end
 			
 
 			# Write some recommendations for buying/selling
-			puts 'Recommendations report: '
+			puts "Recommendations report for #{component['product_type_id']}: "
 			Benchmark.bm do |x|
-				x.report { @recommendations << writeRecommendations(@orderArray, componentQuantity.to_i * options[:minAmount], {mode: options[:mode]} ) }
+				x.report do 
+					unless @orderArray.empty?
+						@recommendations << writeRecommendations(@orderArray, componentQuantity.to_i * options[:minAmount], {mode: options[:mode]} ) 	
+					else
+						return "No data available"
+					end
+				end
 			end
 
-			puts 'Production cost report: '
+			puts "Production cost report for #{component['product_type_id']}: "
 			Benchmark.bm do |x|
-				x.report { @productionCost << returnCalculatedPrices(@orderArray, componentTypeID, componentQuantity.to_i * options[:minAmount], options[:mode])*componentQuantity.to_i }
+				x.report { @productionCost << returnCalculatedPrices(@orderArray, @componentTypeID, componentQuantity.to_i * options[:minAmount], options[:mode])*componentQuantity.to_i }
 			end
 		end
 		# for each component we now find the middle min price given the amount of components needed (quantity amount) and multiply by required amount of that
 		# component
+		# debug
 		return @productionCost, @recommendations
 	end
 
@@ -84,48 +95,117 @@ module Calculation
 		@volumeArray = Array.new
 		
 		# here we select from the huge array only specific (required) typeid's
-		unsortedPrices = ordersArray.select {|x| x[:typeid] == typeid}
-
+		Benchmark.bm do |x|
+			x.report("Selecting for #{typeid} :") do 
+				@unsortedPrices = ordersArray.select { |x| x[:typeid] == typeid }
+			end
+		end
 		# sort by price to find always the cheapest
-		case mode
-		when :sell
-			sortedPrices = unsortedPrices.sort_by {|a| a[:price].to_i}
-			#p "mode is #{mode}"
-		when :buy
-			sortedPrices = unsortedPrices.sort_by {|a| a[:price].to_i*-1}
-			#p "mode is #{mode}"
+		
+		Benchmark.bm do |x|
+			x.report("Sorting for #{typeid} :") do
+				case mode
+				when :sell
+					@sortedPrices = @unsortedPrices.sort_by {|a| a[:price].to_i}
+					#p "mode is #{mode}"
+				when :buy
+					@sortedPrices = @unsortedPrices.sort_by {|a| a[:price].to_i*-1}
+					#p "mode is #{mode}"
+				end
+			end
 		end
 
 		#p sortedPrices
 		#calculate cheapest middle price
-		calculateMiddlePrice(sortedPrices, amount)
+		puts "CalculatedMiddlePrice result for #{typeid}:"
+		calculateMiddlePrice(@sortedPrices, amount)
 	end
 
-
 	def self.calculateMiddlePrice(prices, amount)
-		order = prices.flat_map{|item| [item[:price].to_i] * item[:volRemain].to_i } #step 1      
-	  unless amount > order.count
-	  	order[1..amount].reduce(:+)/amount #step 2
-	  else
-	  	order.reduce(:+)/order.count
+		volume_remaining = amount
+
+  		total = prices.reduce(0) do |sum, item|
+	    if item[:volRemain].to_i > volume_remaining
+	      sum, volume_remaining = sum + item[:price].to_i * volume_remaining, 0
+	      break sum
+	    end
+	    volume_remaining -= item[:volRemain].to_i
+	    sum + item[:price].to_i * item[:volRemain].to_i
 	  end
+
+	  return total / amount unless volume_remaining > 0
+	  raise "Required volume of #{volume} could not be satisfied!"
+	end
+
+	def self.calculateMiddlePriceWORKING(prices, amount)
+		@runner = amount
+		@price = 0
+		i = 0
+		Benchmark.bm do |x|
+			x.report("New middle prices :") do
+				# all the code goes in here
+				
+				while @runner > 0 do
+					if prices[i]
+						# Here we need to substract from each price item the volume to
+						# figure out how many pieces we need yet to cover
+						# puts @runner
+						price_item = prices[i] 
+						# Here we need to substract from each price item the volume to
+						# figure out how many pieces we need yet to cover
+						stationQuantity = price_item[:volRemain].to_i
+						
+						runner_to_check = @runner - stationQuantity
+						stationPrice = price_item[:price].to_i
+						if runner_to_check > 0
+							@price += stationQuantity * stationPrice
+						else
+							@price += @runner * stationPrice
+						end
+						i += 1
+						@runner -= stationQuantity
+
+					else
+						return @price
+					end
+				end
+				return (@price/amount)
+				
+			end
+		end
+	end
+
+	def self.calculateMiddlePriceOLD(prices, amount)
+		Benchmark.bm do |x|
+			x.report("Flatting the map :") do
+				@order = prices.lazy.flat_map{|item| [item[:price].to_i] * item[:volRemain].to_i }.force #step 1      
+			end
+		end
+		debug
+		Benchmark.bm do |x|
+			x.report("Conditional for Middle prices: ") do
+			  unless amount > @order.count
+			  	@order[1..amount].reduce(:+)/amount #step 2
+			  else
+			  	@order.reduce(:+)/@order.count
+			  end
+			end
+		end
 	end
 
 	def self.writeRecommendations(array, amount, options = {})
 		# p "first array: #{array}"
 
-
-
 		array = sortArray(array, options[:mode])
 
+		@sliceResult = returnIndexForSlice(array, amount)
+		@recommendationsAmount = amount
+		
 
+		range = @sliceResult[0]
+		lastValue = @sliceResult[1]
 
-		sliceResult = returnIndexForSlice(array, amount)
-
-		range = sliceResult[0]
-		lastValue = sliceResult[1]
-
-		newArray = array.slice(0,range)
+		@recommendationsArray = array.slice(0,range)
 
 		case options[:mode]
 		when :cheap
@@ -133,15 +213,24 @@ module Calculation
 		when :expensive
 			verb = "selling"
 		end
-		newArray.each do |arrayValue|
-			unless arrayValue.equal? newArray.last
-				return newArray
-				# p "We recommend #{verb} #{arrayValue[:volRemain]} of #{arrayValue[:typeid]} at #{arrayValue[:stationName]}"
-			else
-				# return newArray
-				return newArray, lastValue
-				# p "We recommend #{verb} #{lastValue} of #{arrayValue[:typeid]} at #{arrayValue[:stationName]}"
-			end
+
+		# This conditional is covering 3 cases:
+		# There is only one result in recom array (for example you need 300 units and
+		# the very first offer gives you 401230 units, we only need to return 300)
+		# The second conditional checks if the last value of recom array exceeds the
+		# variable "last value" (which gives us the remaning amount required). If yes,
+		# we need to return the last value to user. (for example we have an output 
+		# 50 20 40, but only need 80 units. In this case we need to print out for the
+		# _last_ item not 40, but 10)
+
+		if @recommendationsArray[0][:volRemain].to_i > @recommendationsAmount
+			@recommendationsArray[0][:volRemain] = @recommendationsAmount
+			return @recommendationsArray
+		elsif @recommendationsArray[-1][:volRemain].to_i > lastValue
+			@recommendationsArray[-1][:volRemain] = lastValue
+			return @recommendationsArray
+		else
+			return @recommendationsArray
 		end
 	end
 

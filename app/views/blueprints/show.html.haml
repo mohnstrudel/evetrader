@@ -23,104 +23,152 @@
                       =bp_item.product_type_id
                       , Quantity
                       =bp_item.quantity
-
-      .row
-        .col-sm-4.col-xl-3
-          .panel.panel-tile.text-center.br-a.br-grey
-            .panel-body
-              %h1.fs30.mt5.mbn
-                =formatBigNumber(@productionPrice.sum)
-                ISK
-              %h6.text-system PRODUCTION COST
-            .panel-footer.br-t.p12
-              %span.fs11
-                / %i.fa.fa-arrow-up.pr5
-                per 
-                %b ONE
-                end production Item
-        .col-sm-4.col-xl-3
-          .panel.panel-tile.text-center.br-a.br-grey
-            .panel-body
-              %h1.fs30.mt5.mbn
-                =formatBigNumber(@sellPrice[0])
-                ISK
-              %h6.text-system BEST SELL PRICE
-            .panel-footer.br-t.p12
-              %span.fs11
-                / %i.fa.fa-arrow-up.pr5
-                per 
-                %b ONE
-                end production Item
-        .col-sm-4.col-xl-3
-          .panel.panel-tile.text-center.br-a.br-grey
-            .panel-body
-              %h1.fs30.mt5.mbn
-                =formatBigNumber(@profit)
-                ISK
-              %h6{:class => "#{@profit_class}"}
-                =@word_result
-            .panel-footer.br-t.p12
-              %span.fs11
-                %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
-                per
-                %b ONE
-                end production Item
-        .col-sm-3.col-xl-3.visible-xl
-          .panel.panel-tile.text-center.br-a.br-grey
-            .panel-body
-              %h1.fs30.mt5.mbn
-                =formatBigNumber(@profit * 100)
-                ISK
-              %h6{:class => "#{@profit_class}"}
-                =@word_result
-            .panel-footer.br-t.p12
-              %span.fs11
-                %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
-                per
-                %b BUNCH
-      / Materials suggestion table
-      .panel
-        .panel-heading
-          %span.panel-title.hidden-xs Where to buy materials
-        .panel-body.pn
-          .table-responsive
-            %table.table.admin-form.theme-warning.tc-checkbox-1.fs13
-              %thead
-                %tr.bg-light
-                  %th Image
-                  %th Material
-                  %th Station Name
-                  %th Quantity
-                  %th Price
-              %tbody
-                -@buyRecommendations.each do |typeid|
-                  -if typeid.length == 2 && typeid[1].class == Fixnum
-                    %tr
-                      %td
-                        =image_tag findPicture(typeid[0][0][:typeid])
-                      %td
-                        =Item.find(typeid[0][0][:typeid]).name
-                      %td
-                        =typeid[0][0][:stationName]
-                      %td
-                        =typeid[1]
-                      %td
-                        =typeid[0][0][:price]
-                  -else
-                    -typeid.each do |order|
-                      -if order.length == 1
-                        %tr
-                          %td
-                            =image_tag findPicture(order[0][:typeid])
-                          %td
-                            =Item.find(order[0][:typeid]).name
-                          %td
-                            =order[0][:stationName]
-                          %td
-                            =order[0][:volRemain]
-                          %td
-                            =order[0][:price]   
-                      -else
+      -if @error
+        .alert.alert-danger.alert-dismissable
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} ×
+          %i.fa.fa-remove.pr10
+          %strong We're sorry!
+          For at least one of requested TypeID's there are no prices on eve-central.com (Yep, that happens.)
+          =link_to "Please look for another blueprint.", root_path, class: 'alert-link'
+      -else
+        .row
+          .col-sm-4.col-xl-3
+            .panel.panel-tile.text-center.br-a.br-grey
+              .panel-body
+                %h1.fs30.mt5.mbn
+                  =formatBigNumber(@productionPrice.sum)
+                  ISK
+                %h6.text-system PRODUCTION COST
+              .panel-footer.br-t.p12
+                %span.fs11
+                  / %i.fa.fa-arrow-up.pr5
+                  per 
+                  %b ONE
+                  end production Item
+          .col-sm-4.col-xl-3
+            .panel.panel-tile.text-center.br-a.br-grey
+              .panel-body
+                %h1.fs30.mt5.mbn
+                  =formatBigNumber(@sellPrice)
+                  ISK
+                %h6.text-system BEST SELL PRICE
+              .panel-footer.br-t.p12
+                %span.fs11
+                  / %i.fa.fa-arrow-up.pr5
+                  per 
+                  %b ONE
+                  end production Item
+          .col-sm-4.col-xl-3
+            .panel.panel-tile.text-center.br-a.br-grey
+              .panel-body
+                %h1.fs30.mt5.mbn
+                  =formatBigNumber(@profit)
+                  ISK
+                %h6{:class => "#{@profit_class}"}
+                  =@word_result
+              .panel-footer.br-t.p12
+                %span.fs11
+                  %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
+                  per
+                  %b ONE
+                  end production Item
+          .col-sm-3.col-xl-3.visible-xl
+            .panel.panel-tile.text-center.br-a.br-grey
+              .panel-body
+                %h1.fs30.mt5.mbn
+                  =formatBigNumber(@profit * 100)
+                  ISK
+                %h6{:class => "#{@profit_class}"}
+                  =@word_result
+              .panel-footer.br-t.p12
+                %span.fs11
+                  %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
+                  per
+                  %b BUNCH
+        / Materials suggestion table
+        .panel
+          .panel-heading
+            %span.panel-title.hidden-xs Where to buy materials
+          .panel-body.pn
+            .table-responsive
+              %table.table.admin-form.theme-warning.tc-checkbox-1.fs13
+                %thead
+                  %tr.bg-light
+                    %th Image
+                    %th Material
+                    %th Station Name
+                    %th Quantity
+                    %th Price
+                %tbody
+                  -@buyRecommendations.each do |typeid|
+                    -if typeid.length == 2 && typeid[1].class == Fixnum
+                      %tr
+                        %td
+                          =image_tag findPicture(typeid[0][0][:typeid])
+                        %td
+                          =Item.find(typeid[0][0][:typeid]).name
+                        %td
+                          =typeid[0][0][:stationName]
+                        %td
+                          =typeid[1]
+                        %td
+                          =typeid[0][0][:price]
+                    -else
+                      -typeid.each do |order|
+                        -if order.length == 1
+                          %tr
+                            %td
+                              =image_tag findPicture(order[0][:typeid])
+                            %td
+                              =Item.find(order[0][:typeid]).name
+                            %td
+                              =order[0][:stationName]
+                            %td
+                              =order[0][:volRemain]
+                            %td
+                              =order[0][:price]   
+                        -else
+                          %tr
+                            %td
+                              =image_tag findPicture(order[:typeid])
+                            %td
+                              =Item.find(order[:typeid]).name
+                            %td
+                              =order[:stationName]
+                            %td
+                              =order[:volRemain]
+                            %td
+                              =order[:price] 
+        / End product suggestion table
+        .panel
+          .panel-heading
+            %span.panel-title.hidden-xs Where to sell end product
+          .panel-body.pn
+            .table-responsive
+              %table.table.admin-form.theme-warning.tc-checkbox-1.fs13
+                %thead
+                  %tr.bg-light
+                    %th Image
+                    %th Material
+                    %th Station Name
+                    %th Quantity
+                    %th Price
+                %tbody
+                  -@sellRecommendations.each do |typeid|
+                    -if typeid.length == 2 && typeid[1].class == Fixnum
+                      %tr
+                        %td
+                          =image_tag findPicture(typeid[0][0][:typeid])
+                        %td
+                          =Item.find(typeid[0][0][:typeid]).name
+                        %td
+                          =typeid[0][0][:stationName]
+                        %td
+                          =typeid[1]
+                        %td
+                          =typeid[0][0][:price]
+                    -else
+                      -typeid.each do |order|
                         %tr
                           %td
                             =image_tag findPicture(order[:typeid])
@@ -131,45 +179,4 @@
                           %td
                             =order[:volRemain]
                           %td
-                            =order[:price] 
-      / End product suggestion table
-      .panel
-        .panel-heading
-          %span.panel-title.hidden-xs Where to sell end product
-        .panel-body.pn
-          .table-responsive
-            %table.table.admin-form.theme-warning.tc-checkbox-1.fs13
-              %thead
-                %tr.bg-light
-                  %th Image
-                  %th Material
-                  %th Station Name
-                  %th Quantity
-                  %th Price
-              %tbody
-                -@sellRecommendations.each do |typeid|
-                  -if typeid.length == 2 && typeid[1].class == Fixnum
-                    %tr
-                      %td
-                        =image_tag findPicture(typeid[0][0][:typeid])
-                      %td
-                        =Item.find(typeid[0][0][:typeid]).name
-                      %td
-                        =typeid[0][0][:stationName]
-                      %td
-                        =typeid[1]
-                      %td
-                        =typeid[0][0][:price]
-                  -else
-                    -typeid.each do |order|
-                      %tr
-                        %td
-                          =image_tag findPicture(order[:typeid])
-                        %td
-                          =Item.find(order[:typeid]).name
-                        %td
-                          =order[:stationName]
-                        %td
-                          =order[:volRemain]
-                        %td
-                          =order[:price]    
+                            =order[:price]    

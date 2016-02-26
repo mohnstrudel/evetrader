@@ -1,2 +1,43 @@
-%h1 StaticPages#about
-%p Find me in app/views/static_pages/about.html.haml
+#eve_wrapper
+	#content.animated.fadeIn
+		.row
+			.col-md-12
+				.panel
+					.panel-heading
+						%span.panel-icon
+							%i.fa.fa-info
+						%span.panel-title About
+					.panel-body
+						.bs-component
+							%h1.mtn
+								Greetings, capsuleers!
+						%p 
+							Are you tired of keeping the prices in your Excel sheets up to date just to figure out if these or those blueprints are profitable enough to be produced? I know I am. This is why EVE Trader was created.
+						%p 
+							This services is intented to make life for all productioneers out there easier. Here you can calculate the profit on every blueprint currently available in EVE Online. This service provides some simplifications for you, so you don't have to input tons of parameters to just quickly check if a certain blueprint production is profitable or not.
+						%p
+							Prices are kept up to date automatically via the eve-central.com API.
+						.bs-component
+							%h2
+								Assumptions
+						%p 
+							Eve trader includes only solar systems, which are within 5 jumps of main trade hubs. The basic idea behind it - most of the time you like to buy a bunch of components fast (and cheap), mostly 
+							%b in
+							main trade hubs, however for brighter diversity I included the (highsec) areas around those hubs.
+						%p
+							As of today (25/02/2016) I am assuming, that a bunch simply contains 100 pieces of
+							%b end product.
+							However one of the goals for future releases will be to make this parameter variable. This will be most likely the only additional parameter that this site will you ask for (beside the actual blueprint) because prices may indeed vary if you want to build 100 Trimark Armor Pumps or 10.000
+						%p
+							This service does not calculate freight cost or other stuff. It is made purely for production.
+						.bs-component
+							%h3
+								About the author
+						%p 
+							My name is Anton and I'm a passionate product manager and EVE gamer. Check out more at 
+							=link_to "http://blog.handsomecake.com", "http://blog.handsomecake.com"
+						.bs-component
+							%h3 Feedback
+						%p 
+							Please don't hesitate to leave any feedback via 
+							=mail_to "dev@handsomecake.com"
