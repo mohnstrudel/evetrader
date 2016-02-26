@@ -82,4 +82,5 @@ production:
   <<: *default
   database: evetrader_production
   username: evetrader
-  password: <%= ENV['EVETRADER_DATABASE_PASSWORD'] %>
+  password: 67as12bn89!
+  host: localhost
