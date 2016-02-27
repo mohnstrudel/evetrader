@@ -133,8 +133,13 @@ module Calculation
 	    sum + item[:price].to_i * item[:volRemain].to_i
 	  end
 
-	  return total / amount unless volume_remaining > 0
-	  raise "Required volume of #{volume} could not be satisfied!"
+	  if volume_remaining > 0
+	  	return total / (amount - volume_remaining)
+	  else
+	  	return total / amount
+	  end
+	  # return total / amount unless volume_remaining > 0
+	  # raise "Required volume of #{amount} could not be satisfied!"
 	end
 
 	def self.calculateMiddlePriceWORKING(prices, amount)
