@@ -10,11 +10,18 @@ class BlueprintsController < ApplicationController
 	end
 
 	def show
+		if params[:minAmount].empty?
+			@minAmount = 1
+		else
+			@minAmount = params[:minAmount].to_i
+		end
+
+
 		componentsHash = @blueprint.blueprint_items
 		product = [@blueprint]
 		
-		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: 100, mode: :sell})
-		myProduct = Calculation.findBestPrice({components: product, minAmount: 100, mode: :buy})
+		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: @minAmount, mode: :sell})
+		myProduct = Calculation.findBestPrice({components: product, minAmount: @minAmount, mode: :buy})
 		unless myComponents.class == String or myProduct.class == String
 			@productionPrice = myComponents[0]
 			@buyRecommendations = myComponents[1]

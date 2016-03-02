@@ -12,6 +12,6 @@
  *
  *= require_tree .
  *= require_self
- *= require theme
+ *= require_tree ../../../vendor/assets/stylesheets/.
  *= require font-awesome
  */

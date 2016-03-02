@@ -76,7 +76,7 @@
             .panel.panel-tile.text-center.br-a.br-grey
               .panel-body
                 %h1.fs30.mt5.mbn
-                  =formatBigNumber(@profit * 100)
+                  =formatBigNumber(@profit * @minAmount)
                   ISK
                 %h6{:class => "#{@profit_class}"}
                   =@word_result
@@ -84,7 +84,8 @@
                 %span.fs11
                   %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
                   per
-                  %b BUNCH
+                  %b requested BATCH
+                  ="(#{pluralize(@minAmount, 'unit')})"
         / Materials suggestion table
         .panel
           .panel-heading

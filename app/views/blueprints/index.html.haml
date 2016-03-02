@@ -16,10 +16,25 @@
 						blueprint results currently stored.
 				.panel-menu
 					%form
-						.input-group.input-hero.input-hero-sm
-							%span.input-group-addon
-								%i.fa.fa-search
-							%input#icon-filter.form-control{:placeholder => "Enter blueprint ID or name...", :type => "text", :name => "search", :value => params[:search]}
+						=form_tag blueprints_path, method: 'get' do
+							.row
+								.col-md-6
+									.input-group.input-hero.input-hero-sm
+										%span.input-group-addon
+											%i.fa.fa-search
+										%input#icon-filter.form-control{:placeholder => "Enter blueprint ID or name...", :type => "text", :name => "search", :value => params[:search]}
+								.col-md-6
+									.input-group.input-hero.input-hero-sm
+										%span.input-group-addon
+											%i.fa.fa-calculator
+										%input.form-control{:placeholder => "Desired amount of end products (default: 1)", :type => "text", name: 'minAmount', :value => params[:minAmount]}
+							.row
+								.col-sm-4
+								.col-sm-4
+									%section#content
+										= submit_tag "Search", :name => nil, class: 'btn btn-lg btn-system btn-block'
+								.col-sm-4
+
 				.panel-body.ph20
 					.tab-content
 						/ Classic Search Pane
@@ -37,7 +52,7 @@
 								-@blueprints.each do |blueprint|
 									.search-result
 										%h3
-											=link_to blueprint.name, blueprint_path(blueprint)
+											=link_to blueprint.name, blueprint_path(blueprint, minAmount: params[:minAmount])
 										%ul.result-meta
 											%li
 												TypeID:
