@@ -28,11 +28,13 @@
 										%span.input-group-addon
 											%i.fa.fa-calculator
 										%input.form-control{:placeholder => "Desired amount of end products (default: 1)", :type => "text", name: 'minAmount', :value => params[:minAmount]}
+									%span.help-block.mt5
+										%i.fa.fa-bell
+										Please do keep in mind, that for bigger blueprints (i.e. battleships) higher amounts will result in slower responses (for example for 100 Abaddons the service will need to find for you 1.387.033.300 units of cheapest Tritanium)
 							.row
 								.col-sm-4
 								.col-sm-4
-									%section#content
-										= submit_tag "Search", :name => nil, class: 'btn btn-lg btn-system btn-block'
+									= submit_tag "Search", :name => nil, class: 'btn btn-lg btn-system btn-block'
 								.col-sm-4
 
 				.panel-body.ph20
