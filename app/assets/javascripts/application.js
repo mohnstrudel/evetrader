@@ -15,4 +15,3 @@
 //= require turbolinks
 //= require_tree .
 //= require main
-//= require_tree ../../../vendor/assets/javascripts/utility/.
