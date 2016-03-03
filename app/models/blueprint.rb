@@ -4,6 +4,18 @@ class Blueprint < ActiveRecord::Base
 
 	# scope :search, ->(search){ where('keywords LIKE ?', "%#{search.downcase}%") if search.present? else }
 
+	def to_param
+    	"#{id} #{name}".parameterize
+  	end
+
+  	def to_title
+  		name
+  	end
+
+  	def to_keywords
+  		name.split(" ")
+  	end
+
 	before_save :set_keywords
 
 	def self.search(keyword)

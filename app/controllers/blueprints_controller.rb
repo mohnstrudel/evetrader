@@ -10,7 +10,7 @@ class BlueprintsController < ApplicationController
 	end
 
 	def show
-		if params[:minAmount].empty?
+		if  params[:minAmount].nil? or params[:minAmount].empty?
 			@minAmount = 1
 		else
 			@minAmount = params[:minAmount].to_i
