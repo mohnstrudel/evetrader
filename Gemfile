@@ -29,6 +29,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Lets make this site SEO friendly
 gem 'metamagic' 
+gem 'sitemap_generator'
 
 
 # HAML markup
