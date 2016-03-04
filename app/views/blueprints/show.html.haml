@@ -26,6 +26,11 @@
                       =bp_item.product_type_id
                       , Quantity
                       =bp_item.quantity
+              %p.p2
+                End product:
+                %ul
+                  %li
+                    ="You receive #{pluralize(@endproduct_multuplicator, 'unit')} of end product."
       -if @error
         .alert.alert-danger.alert-dismissable
           %button.close{"aria-hidden" => "true", "data-dismiss" => "alert", :type => "button"} ×
@@ -47,7 +52,9 @@
                   / %i.fa.fa-arrow-up.pr5
                   per 
                   %b ONE
-                  end production Item
+                  blueprint run
+                  %br
+                  ="(yielding #{pluralize(@endproduct_multuplicator, 'unit')})"
           .col-sm-4.col-xl-3
             .panel.panel-tile.text-center.br-a.br-grey
               .panel-body
@@ -60,7 +67,7 @@
                   / %i.fa.fa-arrow-up.pr5
                   per 
                   %b ONE
-                  end production Item
+                  blueprint run
           .col-sm-4.col-xl-3
             .panel.panel-tile.text-center.br-a.br-grey
               .panel-body
@@ -74,7 +81,7 @@
                   %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
                   per
                   %b ONE
-                  end production Item
+                  blueprint run
           .col-sm-3.col-xl-3.visible-xl
             .panel.panel-tile.text-center.br-a.br-grey
               .panel-body
@@ -88,7 +95,9 @@
                   %i.pr5.fa{:class => "#{@arrow_class} #{@profit_class}"}
                   per
                   %b requested BATCH
-                  ="(#{pluralize(@minAmount, 'unit')})"
+                  ="(#{pluralize(@minAmount, 'run')})"
+                  %br
+                  ="(yielding #{pluralize(@minAmount*@endproduct_multuplicator, 'unit')})"
         / Materials suggestion table
         .panel
           .panel-heading

@@ -16,17 +16,17 @@ class BlueprintsController < ApplicationController
 			@minAmount = params[:minAmount].to_i
 		end
 
-
+		@endproduct_multuplicator = @blueprint.product_type_quantity
 		componentsHash = @blueprint.blueprint_items
 		product = [@blueprint]
 		
 		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: @minAmount, mode: :sell})
-		myProduct = Calculation.findBestPrice({components: product, minAmount: @minAmount, mode: :buy})
+		myProduct = Calculation.findBestPrice({components: product, minAmount: (@minAmount*@endproduct_multuplicator), mode: :buy})
 		unless myComponents.class == String or myProduct.class == String
 			@productionPrice = myComponents[0]
 			@buyRecommendations = myComponents[1]
 
-			@sellPrice = myProduct[0][0]
+			@sellPrice = myProduct[0][0]*@endproduct_multuplicator
 			@sellRecommendations = myProduct[1]
 
 			@profit = @sellPrice - @productionPrice.sum
