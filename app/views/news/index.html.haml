@@ -1,0 +1,21 @@
+- meta title: 'News'
+- meta keywords: %w(latest news)
+#eve_wrapper
+	#content.animated.fadeIn
+		.row
+			.col-md-12
+				.panel
+					.panel-heading
+						%span.panel-icon
+							%i.fa.fa-newspaper-o
+						%span.panel-title Latest news
+					.panel-body
+						-@news.each do |one_news|
+							.bs-component
+								%h1.mtn
+									=link_to one_news.title, news_path(one_news)
+							%p 
+								=truncate(one_news.body, length: 400) { link_to "Continue reading", news_path(one_news) }
+							%h5.mtn
+								="written #{distance_of_time_in_words(one_news.created_at, Time.now)} ago"
+							%hr

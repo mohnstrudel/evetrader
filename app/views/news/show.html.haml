@@ -1,0 +1,19 @@
+- meta title: @news.title
+- meta keywords: @news.to_keywords
+#eve_wrapper
+	#content.animated.fadeIn
+		.row
+			.col-md-12
+				.panel.panel-info.panel-border.top
+					.panel-heading
+						%span.panel-icon
+						%span.panel-title
+							=@news.title
+					.panel-body
+						%p.p2
+							%p.dropcap.dropcap-info.dropcap-fill
+								=@news.body
+						%hr
+						="written #{time_ago_in_words(@news.created_at)} ago"
+						%p
+							=link_to "back", news_index_path

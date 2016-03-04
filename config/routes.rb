@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   match '/about' , to: 'static_pages#about', via: 'get'
 
   resources :blueprints
+  resources :news
 
   root 'blueprints#index'
   # The priority is based upon order of creation: first created -> highest priority.
