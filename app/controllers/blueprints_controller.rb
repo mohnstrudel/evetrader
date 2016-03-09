@@ -16,12 +16,25 @@ class BlueprintsController < ApplicationController
 			@minAmount = params[:minAmount].to_i
 		end
 
+		if params[:productPrices].nil?
+			@product_mode = 'sell'
+		else
+			@product_mode = 'buy'
+		end
+
+		if params[:materialPrices].nil?
+			@materials_mode = 'sell'
+		else
+			@materials_mode = 'buy'
+		end
+
 		@endproduct_multuplicator = @blueprint.product_type_quantity
 		componentsHash = @blueprint.blueprint_items
 		product = [@blueprint]
 		
-		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: @minAmount, mode: :sell})
-		myProduct = Calculation.findBestPrice({components: product, minAmount: (@minAmount*@endproduct_multuplicator), mode: :buy})
+		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: @minAmount, mode: @materials_mode.to_sym})
+		myProduct = Calculation.findBestPrice({components: product, minAmount: (@minAmount*@endproduct_multuplicator), mode: @product_mode.to_sym})
+		
 		unless myComponents.class == String or myProduct.class == String
 			@productionPrice = myComponents[0]
 			@buyRecommendations = myComponents[1]

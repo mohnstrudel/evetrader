@@ -1,7 +1,7 @@
 - meta title: "Blueprints Index", keywords: %w(eve-online blueprint profit calculator profitability)
 %section#eve_wrapper
 	%section#content.animated.fadeIn
-		/ Demo Text Content
+
 		.pl15.pr50
 			%h4 Welcome to EVE Trader
 			%hr.alt.short
@@ -15,28 +15,72 @@
 					%span.panel-title.text-muted.hidden-xs 
 						=@total_amount
 						blueprint results currently stored.
+					%ul.nav.panel-tabs-border.panel-tabs
+						%li.active
+							%a{"aria-expanded" => "true", "data-toggle" => "tab", :href => "#tab1_1"} Search
+						%li
+							%a{"aria-expanded" => "false", "data-toggle" => "tab", :href => "#tab1_2"} Expert settings
+	
 				.panel-menu
-					%form
-						=form_tag blueprints_path, method: 'get' do
-							.row
-								.col-md-6
-									.input-group.input-hero.input-hero-sm
-										%span.input-group-addon
-											%i.fa.fa-search
-										%input#icon-filter.form-control{:placeholder => "Enter blueprint ID or name...", :type => "text", :name => "search", :value => params[:search]}
-								.col-md-6
-									.input-group.input-hero.input-hero-sm
-										%span.input-group-addon
-											%i.fa.fa-calculator
-										%input.form-control{:placeholder => "Desired amount of end products (default: 1)", :type => "text", name: 'minAmount', :value => params[:minAmount]}
-									%span.help-block.mt5
-										%i.fa.fa-bell
-										Please do keep in mind, that for bigger blueprints (i.e. battleships) higher amounts will result in slower responses (for example for 100 Abaddons the service will need to find for you 1.387.033.300 units of cheapest Tritanium)
-							.row
-								.col-sm-4
-								.col-sm-4
-									= submit_tag "Search", :name => nil, class: 'btn btn-lg btn-system btn-block'
-								.col-sm-4
+					=form_tag blueprints_path, method: 'get' do
+						.tab-content.pn.br-n
+							#tab1_1.tab-pane.active
+								.row
+									.col-md-6
+										.input-group.input-hero.input-hero-sm
+											%span.input-group-addon
+												%i.fa.fa-search
+											%input#icon-filter.form-control{:placeholder => "Enter blueprint ID or name...", :type => "text", :name => "search", :value => params[:search]}
+									.col-md-6
+										.input-group.input-hero.input-hero-sm
+											%span.input-group-addon
+												%i.fa.fa-calculator
+											%input.form-control{:placeholder => "Desired amount of end products (default: 1)", :type => "text", name: 'minAmount', :value => params[:minAmount]}
+										%span.help-block.mt5
+											%i.fa.fa-bell
+											Please do keep in mind, that for bigger blueprints (i.e. battleships) higher amounts will result in slower responses (for example for 100 Abaddons the service will need to find for you 1.387.033.300 units of cheapest Tritanium)
+							#tab1_2.tab-pane
+								.row
+									.col-md-12
+										%span.help-block.mt5
+											%i.fa.fa-bell
+											Don't change those if you don't know what you are doing.
+								.row
+									.col-md-6
+										.panel
+											.panel-heading
+												%span.panel-title At what kind of prices to buy materials?
+											.panel-body
+												.form-group
+													%label.col-md-3.control-label Sell prices
+													.col-md-2
+														.bs-component
+															.switch.switch-info.switch-inline
+																%input#exampleCheckboxSwitch1{:checked => false, :type => "checkbox", name: 'materialPrices', value: 'sell'}
+																	%label{:for => "exampleCheckboxSwitch1"}
+													%label.col-md-3.control-label Buy prices
+													.col-md-4
+										
+									.col-md-6
+										.panel
+											.panel-heading
+												%span.panel-title At what kind of prices to sell end products?
+											.panel-body
+												.form-group
+													%label.col-md-3.control-label Sell prices
+													.col-md-2
+														.bs-component
+															.switch.switch-info.switch-inline
+																%input#exampleCheckboxSwitch2{:checked => true, :type => "checkbox", name: 'productPrices', value: 'buy'}
+																	%label{:for => "exampleCheckboxSwitch2"}
+													%label.col-md-3.control-label Buy prices
+													.col-md-4
+						
+						.row
+							.col-sm-4
+							.col-sm-4
+								= submit_tag "Search", :name => nil, class: 'btn btn-lg btn-system btn-block'
+							.col-sm-4
 
 				.panel-body.ph20
 					.tab-content
@@ -55,7 +99,7 @@
 								-@blueprints.each do |blueprint|
 									.search-result
 										%h3
-											=link_to blueprint.name, blueprint_path(blueprint, minAmount: params[:minAmount])
+											=link_to blueprint.name, blueprint_path(blueprint, minAmount: params[:minAmount], materialPrices: params[:materialPrices], productPrices: params[:productPrices])
 										%ul.result-meta
 											%li
 												TypeID:
