@@ -6,7 +6,10 @@ module Calculation
 	require 'nokogiri'
 
 	def self.findBestPrice(options = {})
-
+		# get the Material Effeciency level (range from 0 to 10 per cent)
+		meLevel = options[:meLevel]
+		
+		# Establish containers for data
 		@productionCost = []
 		@recommendations = []
 
@@ -17,9 +20,11 @@ module Calculation
 
 			# In case we're looking for the final product we need to set the quantity to 1, because
 			# in each 'portion' of a blueprint we're creating 1 product. For components we have
-			# individual quantities, which are provided in the options
+			# individual quantities, which are provided in the options. Furthermore, if there is a
+			# given Material Effeciency level we need to reduce those amount by the given percentage.
+			# Eve Online always rounds up (meaning 2.1 will be 3), thus, using ceil method
 			if component['quantity']
-				componentQuantity =  component['quantity']
+				componentQuantity =  (component['quantity'].to_f * meLevel).ceil
 			else
 				componentQuantity = 1
 			end
@@ -57,7 +62,7 @@ module Calculation
 			Benchmark.bm do |x|
 				x.report do 
 					unless @orderArray.empty?
-						@recommendations << writeRecommendations(@orderArray, componentQuantity.to_i * options[:minAmount], {mode: options[:mode]} ) 	
+						@recommendations << writeRecommendations(@orderArray, componentQuantity * options[:minAmount], {mode: options[:mode]} ) 	
 					else
 						return "No data available"
 					end
@@ -66,7 +71,7 @@ module Calculation
 
 			puts "Production cost report for #{component['product_type_id']}: "
 			Benchmark.bm do |x|
-				x.report { @productionCost << returnCalculatedPrices(@orderArray, @componentTypeID, componentQuantity.to_i * options[:minAmount], options[:mode])*componentQuantity.to_i }
+				x.report { @productionCost << returnCalculatedPrices(@orderArray, @componentTypeID, componentQuantity * options[:minAmount], options[:mode])*componentQuantity.to_i }
 			end
 		end
 		# for each component we now find the middle min price given the amount of components needed (quantity amount) and multiply by required amount of that

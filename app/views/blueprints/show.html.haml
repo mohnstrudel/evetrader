@@ -24,7 +24,8 @@
                       Component Type ID
                       =bp_item.product_type_id
                       , Quantity
-                      =bp_item.quantity
+                      =formatBigNumber((bp_item.quantity * @meLevel).ceil)
+                      ="(default: #{formatBigNumber(bp_item.quantity)})"
               %p.p2
                 End product:
                 %ul
