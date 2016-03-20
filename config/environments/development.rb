@@ -38,4 +38,16 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  
+  config.action_mailer.default_url_options = { host: 'localhost', port: 9292 }
+
+  ActionMailer::Base.smtp_settings = {
+    :user_name => ENV["SENDGRID_USER"],
+    :password => ENV["SENDGRID_PASSWORD"],
+    :domain => 'eve-trader.net',
+    :address => 'smtp.sendgrid.net',
+    :port => 25,
+    :authentication => :plain,
+    :enable_starttls_auto => true
+  }
 end

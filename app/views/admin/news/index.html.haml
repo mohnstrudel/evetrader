@@ -1,0 +1,6 @@
+#eve_wrapper
+	%h1 All News
+	-@news.each do |one_news|
+		%p
+			=one_news.title
+			=link_to 'Edit', edit_admin_news_path(one_news)

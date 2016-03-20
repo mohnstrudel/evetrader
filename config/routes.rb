@@ -1,12 +1,18 @@
 Rails.application.routes.draw do
 
 
+  devise_for :users
   get 'static_pages/home'
 
   match '/about' , to: 'static_pages#about', via: 'get'
 
   resources :blueprints
   resources :news
+
+  namespace :admin do
+    get '', to: 'dashboard#index', as: '/'
+    resources :news
+  end
 
   root 'blueprints#index'
   # The priority is based upon order of creation: first created -> highest priority.

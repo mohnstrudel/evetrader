@@ -12,7 +12,7 @@
 					.panel-body
 						%p.p2
 							%p.dropcap.dropcap-info.dropcap-fill
-								=@news.body
+								=@news.body.html_safe
 						%hr
 						="written #{time_ago_in_words(@news.created_at)} ago"
 						%p

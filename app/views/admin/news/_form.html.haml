@@ -1,0 +1,9 @@
+#eve_wrapper
+	=form_for([:admin, @news]) do |f|
+		=f.label :title
+		=f.text_field :title
+		%br
+		=f.label :body
+		=f.text_area :body
+		%br
+		=f.submit

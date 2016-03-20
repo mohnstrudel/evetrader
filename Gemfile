@@ -31,6 +31,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'metamagic' 
 gem 'sitemap_generator'
 
+# Managing Users with devise
+gem 'devise'
+
+# Store variables in figaro
+gem 'figaro'
 
 # HAML markup
 gem "haml-rails"
