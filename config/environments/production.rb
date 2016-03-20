@@ -79,6 +79,8 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
 
+  config.action_mailer.default_url_options = { host: 'http://eve-trader.com' }
+
   ActionMailer::Base.smtp_settings = {
     :user_name => ENV["SENDGRID_USER"],
     :password => ENV["SENDGRID_PASSWORD"],
