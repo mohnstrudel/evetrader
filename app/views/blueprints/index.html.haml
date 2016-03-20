@@ -1,11 +1,19 @@
 - meta title: "Blueprints Index", keywords: %w(eve-online blueprint profit calculator profitability)
+- og image: "#{request.protocol}#{request.host_with_port}#{asset_path('eve_feature.jpg')}"
+- og title: "EVE Trader - resource for EVE productioneers"
+- og description: "This resource allows productioneers to calculate most profitable blueprints. You just need to query for a specific blueprint and we will give you suggestions where to buy components (cheapest) and where to sell end products (most expensive). Please keep in mind, that as of now we are only covering solar systems which are a) safe and b) within an area of 5 jumps around the 5 main trade hubs (Jita, Amarr, Dodixie, Rens, Hek)."
+- og url: "#{request.protocol}#{request.host_with_port}"
+- og type: "website"
+- twitter card: "EVE-Trader - resource for EVE productioneers"
+- twitter creator: "@MohnstrudelLove"
+
 %section#eve_wrapper
 	%section#content.animated.fadeIn
 
 		.pl15.pr50
 			%h4 Welcome to EVE Trader
 			%hr.alt.short
-				%p.text-muted This resource allows productioneers to calculate most profitable blueprints. You just need to check for a specific blueprint and we will give you suggestions where to buy components (cheapest) and where to sell end products (most expensive). Please keep in mind, that as of now we are only covering solar systems which are a) safe and b) within an area of 5 jumps around the 5 main trade hubs (Jita, Amarr, Dodixie, Rens, Hek).
+				%p.text-muted This resource allows productioneers to calculate most profitable blueprints. You just need to query for a specific blueprint and we will give you suggestions where to buy components (cheapest) and where to sell end products (most expensive). Please keep in mind, that as of now we are only covering solar systems which are a) safe and b) within an area of 5 jumps around the 5 main trade hubs (Jita, Amarr, Dodixie, Rens, Hek).
 
 		/ begin: .tray-center
 		.tray.tray-center

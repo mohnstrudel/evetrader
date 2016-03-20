@@ -1,3 +1,4 @@
+
 .main
 	.header.navbar.navbar-fixed-top
 		.navbar-branding
@@ -11,3 +12,14 @@
 				=link_to 'About', about_path
 			%li
 				=link_to 'News', news_index_path
+		%ul.nav.navbar-nav.navbar-right
+			%li
+				=link_to "Please share and support:", "#"
+			%li
+				=link_to "http://twitter.com/home?status=#{twitter_share}", :target => "_blank", title: "Share on Twitter" do
+					.icon-large.text-info.dark
+						%i.fa.fa-twitter-square.info
+			%li
+				=link_to "http://www.facebook.com/sharer/sharer.php?u=#{facebook_share[0]}&title=#{facebook_share[1]}", target: "_blank", title: "Share on Facebook" do
+					.icon-large.text-info
+						%i.fa.fa-facebook-square
