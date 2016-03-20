@@ -41,6 +41,8 @@ Rails.application.configure do
   
   config.action_mailer.default_url_options = { host: 'localhost', port: 9292 }
 
+  config.action_mailer.delivery_method = :smtp
+
   ActionMailer::Base.smtp_settings = {
     :user_name => ENV["SENDGRID_USER"],
     :password => ENV["SENDGRID_PASSWORD"],
