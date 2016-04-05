@@ -2,7 +2,18 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+
+$(document).on 'page:fetch', ->
+  NProgress.start()
+  return
+
+$(document).on 'page:receive', ->
+  NProgress.done()
+  return
+
 jQuery(document).ready ->
+
+
   'use strict'
   # Init Theme Core    
   Core.init()
@@ -46,3 +57,6 @@ jQuery(document).ready ->
     buttonClass: 'multiselect dropdown-toggle btn btn-default btn-warning'
   });
   return
+
+
+  
