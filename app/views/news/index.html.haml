@@ -11,12 +11,15 @@
 							%i.fa.fa-newspaper-o
 						%span.panel-title Latest news
 					.panel-body
-						-@news.each do |one_news|
+						-@nodes.map do |node|
 							.bs-component
 								%h1.mtn
-									=link_to one_news.title, news_path(one_news)
+									=node.at_css("h2").inner_html.html_safe
+									/ =link_to one_news.title, news_path(one_news)
 							%p 
-								=truncate(one_news.body.html_safe, length: 400) { link_to "Continue reading", news_path(one_news) }
+								=node.at_css("div.entry-content").inner_html.html_safe
+								/ =truncate(one_news.body.html_safe, length: 400) { link_to "Continue reading", news_path(one_news) }
 							%h5.mtn
-								="written #{distance_of_time_in_words(one_news.created_at, Time.now)} ago"
+								=node.at_css('span.posted-on').inner_text
+								/ ="written #{distance_of_time_in_words(one_news.created_at, Time.now)} ago"
 							%hr

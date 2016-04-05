@@ -30,7 +30,7 @@
 							%a{"aria-expanded" => "false", "data-toggle" => "tab", :href => "#tab1_2"} Expert settings
 	
 				.panel-menu
-					=form_tag blueprints_path, method: 'get' do
+					=form_tag blueprints_path, method: 'get', class: 'form-horizontal' do
 						.tab-content.pn.br-n
 							#tab1_1.tab-pane.active
 								.row
@@ -90,8 +90,9 @@
 												%span.panel-title Select desired Material Effeciency level (10% is default)
 											.panel-body.p25.pb10
 												.form-group
-													%label.col-md-3.control-label ME
-													.col-md-8
+													.col-md-4
+														%label.col-md-3.control-label ME
+													.col-md-2
 														%select.select2-info.form-control{:type => "select", name: 'meLevel'}
 															%option{:value => 10} 10
 															%option{:value => 9} 9
@@ -104,8 +105,18 @@
 															%option{:value => 2} 2
 															%option{:value => 1} 1
 															%option{:value => 0} 0
+													.col-md-6
 									.col-md-6
-						
+										.panel
+											.panel-heading
+												%span.panel-title Specify solar systems (by default all are selected)
+											.panel-body.p25.pb10
+												.form-group
+													.col-md-4
+														%label.control-label Solar Systems:
+													.col-md-8
+														.input-group.input-hero.input-hero-sm
+															=select_tag 'systems[]', options_from_collection_for_select(SolarSystem.all, 'system_id', 'name'), { class: 'select2-multiple select2-info form-control select-info', :multiple => true}
 						.row
 							.col-sm-4
 							.col-sm-4
@@ -129,7 +140,7 @@
 								-@blueprints.each do |blueprint|
 									.search-result
 										%h3
-											=link_to blueprint.name, blueprint_path(blueprint, minAmount: params[:minAmount], materialPrices: params[:materialPrices], productPrices: params[:productPrices], meLevel: params[:meLevel])
+											=link_to blueprint.name, blueprint_path(blueprint, minAmount: params[:minAmount], materialPrices: params[:materialPrices], productPrices: params[:productPrices], meLevel: params[:meLevel], solarSystems: params[:systems])
 										%ul.result-meta
 											%li
 												TypeID:

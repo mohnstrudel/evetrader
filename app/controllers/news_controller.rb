@@ -2,7 +2,12 @@ class NewsController < ApplicationController
   before_action :find_news, only: :show
 
   def index
-  	@news = News.all.order(created_at: :desc)
+    url = "http://blog.handsomecake.com/"
+
+    doc = Nokogiri::HTML(open(url))
+
+    @nodes = doc.css('article.category-evetrader')
+  	# @news = News.all.order(created_at: :desc)
   end
 
   def show

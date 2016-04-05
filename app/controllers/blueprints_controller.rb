@@ -11,6 +11,12 @@ class BlueprintsController < ApplicationController
 
 	def show
 
+		if params[:solarSystems].nil?
+			@solarSystems = 'custom'
+		else
+			@solarSystems = params[:solarSystems]
+		end
+
 		@meLevel = ((100 - params[:meLevel].to_f)/100)
 
 		if  params[:minAmount].nil? or params[:minAmount].empty?
@@ -35,8 +41,8 @@ class BlueprintsController < ApplicationController
 		componentsHash = @blueprint.blueprint_items
 		product = [@blueprint]
 		
-		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: @minAmount, mode: @materials_mode.to_sym, meLevel: @meLevel})
-		myProduct = Calculation.findBestPrice({components: product, minAmount: (@minAmount*@endproduct_multuplicator), mode: @product_mode.to_sym, meLevel: @meLevel})
+		myComponents = Calculation.findBestPrice({components: componentsHash, minAmount: @minAmount, mode: @materials_mode.to_sym, meLevel: @meLevel, solarSystems: @solarSystems})
+		myProduct = Calculation.findBestPrice({components: product, minAmount: (@minAmount*@endproduct_multuplicator), mode: @product_mode.to_sym, meLevel: @meLevel, solarSystems: @solarSystems})
 		
 		unless myComponents.class == String or myProduct.class == String
 			@productionPrice = myComponents[0]

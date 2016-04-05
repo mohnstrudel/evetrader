@@ -23,4 +23,26 @@ jQuery(document).ready ->
   # select2 contextual - info
   $('.select2-warning').select2()
   # select2 contextual - warning  
+
+  # Init Boostrap Multiselects
+  $('#multiselect1').multiselect();
+  $('#multiselect2').multiselect({
+    includeSelectAllOption: true
+  });
+  $('#multiselect3').multiselect();
+  $('#multiselect4').multiselect({
+    enableFiltering: true,
+  });
+  $('#multiselect5').multiselect({
+    buttonClass: 'multiselect dropdown-toggle btn btn-default btn-primary'
+  });
+  $('#multiselect6').multiselect({
+    buttonClass: 'multiselect dropdown-toggle btn btn-default btn-info'
+  });
+  $('#multiselect7').multiselect({
+    buttonClass: 'multiselect dropdown-toggle btn btn-default btn-success'
+  });
+  $('#multiselect8').multiselect({
+    buttonClass: 'multiselect dropdown-toggle btn btn-default btn-warning'
+  });
   return

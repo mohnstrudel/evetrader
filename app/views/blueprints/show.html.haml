@@ -21,11 +21,13 @@
                 %ul
                   -@blueprint.blueprint_items.each do |bp_item|
                     %li
-                      Component Type ID
+                      =Item.find(bp_item.product_type_id).name
+                      (Type ID
                       =bp_item.product_type_id
-                      , Quantity
+                      , Quantity with ME
+                      ="#{((1-@meLevel)*100).round}%"
                       =formatBigNumber((bp_item.quantity * @meLevel).ceil)
-                      ="(default: #{formatBigNumber(bp_item.quantity)})"
+                      =", default: #{formatBigNumber(bp_item.quantity)})"
               %p.p2
                 End product:
                 %ul

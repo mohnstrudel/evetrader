@@ -14,8 +14,13 @@ module Calculation
 		@recommendations = []
 
 		print "Printing options: #{options}"
+		
+		start_time = Time.now.to_f
 
 		options[:components].each do |component|
+
+			start_time_component = Time.now.to_f
+			
 			@orderArray = []
 
 			# In case we're looking for the final product we need to set the quantity to 1, because
@@ -30,12 +35,16 @@ module Calculation
 			end
 			
 			@componentTypeID =   component['product_type_id']
-	
-			begin
-				@order_array = Getdata.parseEveCentral(@componentTypeID, options[:mode])
-			rescue Exception => e
-				puts e.message
-			end
+			
+			start_time_getdata = Time.now.to_f
+			# begin
+				@order_array = Getdata.parseEveCentral(@componentTypeID, mode: options[:mode], solarSystems: options[:solarSystems])
+			# rescue Exception => e
+				# puts e.message
+			# end
+			end_time_getdata = Time.now.to_f
+
+			puts "Time for running #{component} is #{end_time_getdata - start_time_getdata} seconds"
 
 			# puts "Printing writeRecommentations"
 			# puts @orderArray
@@ -73,7 +82,15 @@ module Calculation
 			Benchmark.bm do |x|
 				x.report { @productionCost << returnCalculatedPrices(@orderArray, @componentTypeID, componentQuantity * options[:minAmount], options[:mode])*componentQuantity.to_i }
 			end
+
+			end_time_component = Time.now.to_f
+
+			puts "Time to run all calculations for one component - #{component.id} - is: #{end_time_component - start_time_component} seconds"
 		end
+
+		end_time = Time.now.to_f
+
+		puts "Time for running all components - #{end_time - start_time}"
 		# for each component we now find the middle min price given the amount of components needed (quantity amount) and multiply by required amount of that
 		# component
 		# debug

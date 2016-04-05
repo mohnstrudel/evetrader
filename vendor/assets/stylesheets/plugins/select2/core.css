@@ -5,6 +5,8 @@
   margin: 0;
   position: relative;
   vertical-align: middle;
+  /* Add width 100% important because else there is a hardcoded width of 100px in the select*/
+  width: 100% !important;
 }
 /* line 1, ../scss/_single.scss */
 .select2-container .select2-selection--single {
@@ -162,6 +164,7 @@
   background-color: #f0f0f0;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 2px;
+  width: 100%;
 }
 /* line 6, ../scss/theme/default/_single.scss */
 .select2-container--default .select2-selection--single:focus {
