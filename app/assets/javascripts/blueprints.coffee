@@ -24,9 +24,9 @@ jQuery(document).ready ->
   
   # Init Select2 - Basic Multiple
   $('.select2-multiple').select2
-    placeholder: 'Select a state'
+    placeholder: 'Select solar system(s)'
     allowClear: true
-    minimumInputLength: 4
+    minimumInputLength: 3
   
 
   # Init Select2 - Contextuals (via html classes)
@@ -36,8 +36,10 @@ jQuery(document).ready ->
   # select2 contextual - success
   
   # This is the current used Select2!
-  $('.select2-info').select2
-    minimumInputLength: 3
+  # $('.select2-info').select2
+    # minimumInputLength: 3
+
+  $('.select2-info').select2()
 
 
 

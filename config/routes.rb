@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
 
+  get 'solar_systems/list'
+
   devise_for :users
   get 'static_pages/home'
 
