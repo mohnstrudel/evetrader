@@ -29,6 +29,6 @@ SitemapGenerator::Sitemap.create do
   add about_path
 
   Blueprint.find_each do |blueprint|
-    add blueprint_path(blueprint.to_title)
+    add blueprint_path(blueprint.to_param)
   end
 end
